@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Affichage de la video</title>
+</head>
+<body>
+    <h1>Bienvenue sur ma page Web</h1>
+    <div class="video-container" style="width: 640px;" heigth="480px;">
+        <script>
+            //recuperer le conteneur de la video
+
+            var videoContainer = document.getElementsByClassName('video-container');
+            
+            //cree un element image pour la video affichage
+            var videoImg = document.createElement('img');
+            videoImg.style.width = '100%';
+            videoImg.style.height = '100%';
+            videoImg.style.objectFit = 'contain';
+
+            videoContainer.appendChild(videoImg)
+            //fonction pour mettre a jour l'image de la video
+            function updateVideoFrame() {
+                fetch('/video').then(response => response.blob()).then(blob => {
+                    var objectUrl = URL.createObjectURL(blob);
+                    videoImg.src = objectUrl;
+
+                    requestAnimationFrame(updateVideoFrame);
+                });
+                
+            }
+            //Demarrer la mise a jour de la video
+            updateVideoFrame();
+        </script>
+    </div>
+</body>
+</html>
