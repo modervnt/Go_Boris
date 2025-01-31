@@ -1,0 +1,30 @@
+Pour extraire une partie spécifique d'une vidéo (par exemple, de la frame 10 à la frame 40) avec FFmpeg, il faut d'abord convertir ces numéros de frames en temps, car FFmpeg fonctionne généralement avec les timestamps. Voici les étapes :
+
+1. **Déterminer le framerate** de la vidéo. Utilisez la commande suivante pour obtenir les informations sur la vidéo, y compris son framerate :
+
+   ```bash
+   ffmpeg -i input.mp4
+   ```
+
+   Recherchez une ligne comme `fps`, qui indique le nombre d'images par seconde.
+
+2. **Calculer les timestamps** correspondants :
+   - Si la vidéo a, par exemple, un framerate de 30 fps :
+     - La frame 10 correspond à : \( \text{10} / 30 = 0,333 \, \text{secondes} \)
+     - La frame 40 correspond à : \( \text{40} / 30 = 1,333 \, \text{secondes} \)
+
+3. **Utiliser FFmpeg pour couper la vidéo** :
+   Utilisez l'option `-ss` pour définir le point de départ (en secondes) et l'option `-t` pour spécifier la durée de l'extrait. La durée est la différence entre les timestamps de fin et de début.
+
+   Par exemple, pour une vidéo de 30 fps :
+
+   ```bash
+   ffmpeg -i input.mp4 -ss 0.333 -to 1.333 -c copy output.mp4
+   ```
+
+   Si vous voulez réencoder la vidéo pour plus de compatibilité, remplacez `-c copy` par des options de codec, comme `-c:v libx264 -crf 23`.
+
+4. **Validation des résultats** :
+   Vous pouvez vérifier la nouvelle vidéo avec un lecteur pour vous assurer qu’elle contient uniquement les frames souhaitées.
+
+Cela devrait répondre à vos besoins. Si le framerate est variable ou non standard, précisez-le, et nous ajusterons la commande.
